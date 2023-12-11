@@ -13,3 +13,24 @@ class Vendors(models.Model):
     def __str__(self):
         return self.name
     
+
+class PurchaseOrders(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
+    
+    po_number = models.CharField(max_length=16, unique=True)
+    vendor = models.ForeignKey('base.Vendors', on_delete=models.CASCADE, null=True, blank=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    delivery_date = models.DateTimeField(null=True, blank=True) 
+    items = models.JSONField()
+    quantity = models.IntegerField(default=1)
+    status = models.CharField(max_length=9, choices=STATUS_CHOICES)
+    quantity_rating = models.FloatField(null=True , blank=True)
+    issue_date = models.DateTimeField(null=True, blank=True)
+    acknowledgment_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.po_number
