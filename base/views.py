@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VendorsSerializer
-from .models import Vendors
+from .serializers import VendorsSerializer, PurchaseOrdersSerializer
+from .models import Vendors, PurchaseOrders
 
 
 class VendorsView(APIView):
@@ -51,3 +51,11 @@ class VendorsDeatilView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Vendors.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class PurchaseOrdersView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        queryset = PurchaseOrders.objects.all()
+        serializer = PurchaseOrdersSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
