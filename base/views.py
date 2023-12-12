@@ -2,8 +2,8 @@ from rest_framework import status
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VendorsSerializer, PurchaseOrdersSerializer
-from .models import Vendors, PurchaseOrders
+from .serializers import VendorsSerializer, PurchaseOrderSerializer, VendorPerfomanceSerializer
+from .models import Vendors, PurchaseOrders, HistoricalPerformaces
 
 
 class VendorsView(APIView):
@@ -58,11 +58,12 @@ class PurchaseOrdersView(APIView):
 
     def get(self, request, *args, **kwargs):
         purchase_queryset = PurchaseOrders.objects.all()
-        po_serializer = PurchaseOrdersSerializer(purchase_queryset, many=True)
+        po_serializer = PurchaseOrderSerializer(purchase_queryset, many=True)
         return Response(po_serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
-        po_serializer = PurchaseOrdersSerializer(data=request.data)
+        po_serializer = PurchaseOrderSerializer(data=request.data)
+        print(po_serializer)
         if po_serializer.is_valid():
             po_serializer.save()
             return Response(po_serializer.data, status=status.HTTP_201_CREATED)
@@ -90,7 +91,7 @@ class PurchaseOrdersDetailView(APIView):
             purchase_instance = PurchaseOrders.objects.get(id=po_id)
         except PurchaseOrders.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        po_serializer = PurchaseOrdersSerializer(purchase_instance)
+        po_serializer = PurchaseOrderSerializer(purchase_instance)
         return Response(po_serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, *args, **kwargs):
@@ -99,7 +100,7 @@ class PurchaseOrdersDetailView(APIView):
             purchase_instance = PurchaseOrders.objects.get(id=po_id)
         except PurchaseOrders.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        po_serializer = PurchaseOrdersSerializer(purchase_instance, data=request.data, partial=True)
+        po_serializer = PurchaseOrderSerializer(purchase_instance, data=request.data, partial=True)
         if po_serializer.is_valid():
             po_serializer.save()
             return Response(po_serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -132,3 +133,16 @@ class OrderAcknowledgeView(APIView):
         purchase_instance.acknowledgment_date = timezone.now()
         purchase_instance.save()
         return Response("Order acknowledged sucessfully", status=status.HTTP_202_ACCEPTED)
+
+
+
+class VendorPerfomance(APIView):
+    def get(self, request, *args, **kwargs):
+        vendor_id = kwargs["vendor_id"]
+        try:
+            performance_instance = HistoricalPerformaces.objects.get_or_create(vendor_id=vendor_id)
+        except:
+            return Response("No Vendor at given ID")
+        performance_serializer = VendorPerfomanceSerializer(performance_instance)
+
+        return Response(performance_serializer)
