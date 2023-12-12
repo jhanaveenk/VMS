@@ -68,19 +68,6 @@ class PurchaseOrdersView(APIView):
             return Response(po_serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
-"""
-Payload:
-{
-    "po_number": "ucebva6aceuaijk",
-    "vendor": 8,
-    "items": [
-        {"name": "Item1", "quantity": 10},
-        {"name": "Item2", "quantity": 5}
-    ],
-    "quantity": 15,
-    "status": "pending"
-}
-"""
     
 class PurchaseOrdersDetailView(APIView):
     
@@ -104,14 +91,6 @@ class PurchaseOrdersDetailView(APIView):
             po_serializer.save()
             return Response(po_serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-    """
-    PAYLOAD
-    {
-    "delivery_date" : "2023-12-15T08:00:10.000000Z",
-    "status":"completed"
-    }
-    """
 
     def delete(self, request, *args, **kwargs):
         po_id = kwargs["po_id"]
@@ -123,6 +102,7 @@ class PurchaseOrdersDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         
 class OrderAcknowledgeView(APIView):
+
     def get(self, request, *args, **kwargs):
         po_id = kwargs["po_id"]
         try:
@@ -136,12 +116,15 @@ class OrderAcknowledgeView(APIView):
 
 
 class VendorPerfomance(APIView):
+
     def get(self, request, *args, **kwargs):
         vendor_id = kwargs["vendor_id"]
         try:
             performance_instance = HistoricalPerformaces.objects.get_or_create(vendor_id=vendor_id)
         except:
             return Response("No Vendor at given ID")
+        print(performance_instance)
         performance_serializer = VendorPerfomanceSerializer(performance_instance)
 
-        return Response(performance_serializer)
+        return Response(performance_serializer.data)
+    
