@@ -11,34 +11,25 @@ class VendorsSerializer(serializers.ModelSerializer):
 
 class PurchaseOrderSerializer(serializers.ModelSerializer):
 
-    # def validate(self, data):
-    #     print("validated_data:", self.validated_data)
-    #     print("initial_data:", self.initial_data)
-    # # Your validation logic here
-    #     return data
-
     def validate_quality_rating(self, value):
         if not 0 <= value <= 5:
+            print('hello')
             raise serializers.ValidationError("Quality rating should be between 0 and 5.")
         return value
+    
+    def validate(self, data):
+        if 'vendor' in data:
+            data["issue_date"] = timezone.now()
+        if data.get('status') == 'completed':
+            data["delivery_date"] = timezone.now() 
+        if 'items' in data:
+            quantity=0
+            for item in data["items"]:
+                quantity += item.get("quantity")
+            if data.get("quantity") is None or data.get("quantity") != quantity:
+                 data["quantity"] = quantity
+        return data
 
-    def validate_issue_date(self, value):
-        print(value)
-        instance = self.instance
-        if instance and instance.vendor:
-            # Set issue_date to the current time if vendor is present
-            value = timezone.now()
-
-        return value
-
-    # def validate_quantity(self, data):
-    #     if 'items' in data and data['items'] is not None:
-    #         quantity = 0
-    #         for item in data["items"]:
-    #             quantity += item.get("quantity")
-    #         if data.get("quantity") is None or data.get("quantity") != quantity:
-    #             data["quantity"] = quantity
-    #     return data
     class Meta:
         model = PurchaseOrders
         fields = '__all__'

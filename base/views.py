@@ -63,7 +63,6 @@ class PurchaseOrdersView(APIView):
     
     def post(self, request, *args, **kwargs):
         po_serializer = PurchaseOrderSerializer(data=request.data)
-        print(po_serializer)
         if po_serializer.is_valid():
             po_serializer.save()
             return Response(po_serializer.data, status=status.HTTP_201_CREATED)
