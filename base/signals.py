@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
 from django.db.models import F, Avg
 from django.db.models.functions import Coalesce
@@ -10,9 +10,10 @@ from .models import PurchaseOrders, HistoricalPerformaces, Vendors
 def update_vendor_performance_on_save(sender, instance, created, **kwargs):
     vendor = instance.vendor
     if instance.status == 'completed':
+        print(instance.delivery_date)
         update_on_time_delivery_rate(vendor)
-        instance.delivery_date = timezone.now()
-        instance.save()
+        
+        
     if instance.quality_rating is not None:
         update_quality_rating_avg(vendor)
     if instance.acknowledgment_date:
@@ -29,8 +30,7 @@ def update_vendor_performance_on_delete(sender, instance, **kwargs):
         update_quality_rating_avg(vendor)
     update_fulfilment_rate(vendor)
 
-
-## modification needed
+## modification needed ==> 
 def update_on_time_delivery_rate(vendor):
     completed_pos = PurchaseOrders.objects.filter(vendor=vendor, status='completed')
     on_time_deliveries = completed_pos.filter(delivery_date__lte=timezone.now())
