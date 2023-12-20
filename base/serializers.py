@@ -20,8 +20,6 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if 'vendor' in data:
             data["issue_date"] = timezone.now()
-        if data.get('status') == 'completed':
-            data["delivery_date"] = timezone.now() 
         if 'items' in data:
             quantity=0
             for item in data["items"]:

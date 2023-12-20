@@ -103,6 +103,7 @@ class PurchaseOrdersDetailView(APIView):
         except PurchaseOrders.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+
 class OrderAcknowledgeView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -115,52 +116,13 @@ class OrderAcknowledgeView(APIView):
         purchase_instance.save()
         return Response("Order acknowledged sucessfully", status=status.HTTP_202_ACCEPTED)
 
-"""
-On-Time Delivery Rate:
-● Calculated each time a PO status changes to 'completed'.
-● Logic: Count the number of completed POs delivered on or before
-delivery_date and divide by the total number of completed POs for that vendor.
-"""
-
-
 class VendorPerfomance(APIView):
-
-    def on_time_delivery_rate(self, vendor_id):
-        pass
-
-    def average_rating_calculation(self, vendor_id):
-        quality_rating_avg = PurchaseOrders.objects.filter(vendor_id=vendor_id, status='completed', quality_rating__isnull=False).aggregate(average_rating=Avg('quality_rating'))
-        if quality_rating_avg.get("average_rating") is None:
-            return 0
-        return quality_rating_avg.get("average_rating", 0.00)
-        
-    def fulfillment_rate_calculation(self, vendor_id):
-        fulfillment_rate_queryset = PurchaseOrders.objects.filter(vendor_id=vendor_id)
-        total_count , fulfilled_count = len(fulfillment_rate_queryset), 0
-        for obj in fulfillment_rate_queryset:
-            if obj.status == 'completed':
-                fulfilled_count += 1
-        if total_count == 0:
-            fulfilled_orders = 0.00
-        else:
-            fulfilled_orders = fulfilled_count/total_count
-        return fulfilled_orders
-
-    def average_response_time_calculation(self, vendor_id):
-        average_response_time_queryset = PurchaseOrders.objects.filter(vendor_id=vendor_id, acknowledgment_date__isnull=False).aggregate(
-        avg_time=Avg(F('acknowledgment_date') - F('issue_date'),output_field=models.DurationField()))
-        return average_response_time_queryset.get("avg_time")
 
     def get(self, request, *args, **kwargs):
         vendor_id = kwargs["vendor_id"]
         try:
             performance_instance = HistoricalPerformaces.objects.get(vendor_id=vendor_id)
         except HistoricalPerformaces.DoesNotExist:
-            performance_instance = HistoricalPerformaces.objects.create(vendor_id=vendor_id)
-        
-        performance_instance.quality_rating_avg = round(self.average_rating_calculation(vendor_id), 2)
-        performance_instance.fulfillment_rate = round(self.fulfillment_rate_calculation(vendor_id), 2)
-        performance_instance.average_response_time = self.average_response_time_calculation(vendor_id)
-        performance_instance.save()
+            return Response('Data for this vendor does not exists', status=status.HTTP_404_NOT_FOUND)
         performance_serializer = VendorPerfomanceSerializer(performance_instance)
         return Response(performance_serializer.data)
