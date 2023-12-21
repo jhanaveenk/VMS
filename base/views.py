@@ -12,7 +12,6 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class VendorsView(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -29,7 +28,6 @@ class VendorsView(APIView):
     
 
 class VendorsDeatilView(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -64,7 +62,6 @@ class VendorsDeatilView(APIView):
 
 
 class PurchaseOrdersView(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -81,7 +78,6 @@ class PurchaseOrdersView(APIView):
     
     
 class PurchaseOrdersDetailView(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
@@ -116,7 +112,6 @@ class PurchaseOrdersDetailView(APIView):
         
 
 class OrderAcknowledgeView(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -130,7 +125,6 @@ class OrderAcknowledgeView(APIView):
         return Response("Order acknowledged sucessfully", status=status.HTTP_202_ACCEPTED)
 
 class VendorPerfomance(APIView):
-    authentication_classes = [TokenAuthentication] 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -141,35 +135,3 @@ class VendorPerfomance(APIView):
             return Response('Data for this vendor does not exists', status=status.HTTP_404_NOT_FOUND)
         performance_serializer = VendorPerfomanceSerializer(performance_instance)
         return Response(performance_serializer.data)
-    
-
-"""
-{
-"username":"naveen",
-"password":"12345678"
-}
-"""
-from django.contrib.auth.models import User
-
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import authenticate
-
-
-class TokenGenerateView(APIView):
-
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user:
-            # user = request.user
-            # print(user)
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'access_token': str(refresh.access_token),
-                'refresh_token': str(refresh)})
-        else:
-            return Response({
-                'detail': 'Invalid credentials. Authentication failed.',
-            }, status=401)
