@@ -61,7 +61,8 @@ API's ==>
    => GET /api/purchase_orders/{po_id}/: Retrieve details of a specific purchase order. ![Screenshot (55)](https://github.com/jhanaveenk/VMS/assets/71990959/11e6764f-9023-4990-82de-2575afd02db5)
 
    => PUT /api/purchase_orders/{po_id}/: Update a purchase order. ![PO PATCH 1](https://github.com/jhanaveenk/VMS/assets/71990959/98d2a32a-d9f6-4cb7-949a-9bf146f4279c)
-   ![PO PATCH 2](https://github.com/jhanaveenk/VMS/assets/71990959/088ddc3b-c9ac-445e-b66b-cd23cfa9c915)
+   ![PO PATCH 2](https://github.com/jhanaveenk/VMS/assets/71990959/28a0911d-0718-429b-9161-efdbd74e5980)
+
 
    => DELETE /api/purchase_orders/{po_id}/: Delete a purchase order. ![DELETE PO](https://github.com/jhanaveenk/VMS/assets/71990959/c7b70b83-65ac-4e6e-b79d-f0ed45f7026b)
 
