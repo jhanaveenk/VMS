@@ -58,5 +58,8 @@ def update_on_time_delivery_rate(sender, instance, **kwargs):
         if instance.delivery_date >= timezone.now():
             on_time_deliveries = on_time_deliveries+1
         on_time_delivery_rate = round(on_time_deliveries / completed_pos.count(), 2) if completed_pos.count() > 0 else 0.0
-        HistoricalPerformaces.objects.filter(vendor=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)
-        Vendors.objects.filter(pk=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)
+
+        if not hasattr(instance, '_calculation_done'):
+            HistoricalPerformaces.objects.filter(vendor=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)
+            Vendors.objects.filter(pk=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)
+            instance._calculation_done = True
