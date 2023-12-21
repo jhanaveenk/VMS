@@ -23,9 +23,11 @@ create superuser using: python manage.py createsuperuser.
 
   Endpoints to generate tokens and refresh already generated tokens:
   
-  => POST api/token/: when the user provides username and password and gets access_token
+  => POST api/token/: when the user provides username and password and gets access_token. ![Token Geneeration](https://github.com/jhanaveenk/VMS/assets/71990959/dc4a3b9c-1b0d-43aa-8304-18afda4324bb)
+
   
-  => POST api/token/refresh/: The token_refresh is needed when the access_token expires and with the refresh_token user gets new access_token.
+  => POST api/token/refresh/: The token_refresh is needed when the access_token expires and with the refresh_token user gets new access_token. ![Refresh Token](https://github.com/jhanaveenk/VMS/assets/71990959/d91eb370-681b-4e79-8123-2d06bdce53e5)
+
   
 
 API's ==>
@@ -43,20 +45,22 @@ API's ==>
 
 3. Purchase Order Tracking:
    
-    => POST /api/purchase_orders/: Create a purchase order.
-   
-    => GET /api/purchase_orders/: List all purchase orders with an option to filter by the vendor.
-   
-    => GET /api/purchase_orders/{po_id}/: Retrieve details of a specific purchase order.
-   
-    => PUT /api/purchase_orders/{po_id}/: Update a purchase order.
-   
-    => DELETE /api/purchase_orders/{po_id}/: Delete a purchase order.
+    => POST /api/purchase_orders/: Create a purchase order. ![PO POST 1](https://github.com/jhanaveenk/VMS/assets/71990959/c6f1e905-d778-4738-be36-8d654da626db)  ![PO POST 2](https://github.com/jhanaveenk/VMS/assets/71990959/0f78315f-566b-42c0-bdb9-de5fc8215e90)
+
+    => GET /api/purchase_orders/: List all purchase orders with an option to filter by the vendor. ![PO GET 1](https://github.com/jhanaveenk/VMS/assets/71990959/a8b8187e-7318-457c-b98e-f0b883062423) ![PO GET 2](https://github.com/jhanaveenk/VMS/assets/71990959/08c3edcb-2714-4c1b-a96f-834aa3759c5d)
+
+    => GET /api/purchase_orders/{po_id}/: Retrieve details of a specific purchase order. ![Screenshot (55)](https://github.com/jhanaveenk/VMS/assets/71990959/11e6764f-9023-4990-82de-2575afd02db5)
+
+    => PUT /api/purchase_orders/{po_id}/: Update a purchase order. ![PO PATCH 1](https://github.com/jhanaveenk/VMS/assets/71990959/98d2a32a-d9f6-4cb7-949a-9bf146f4279c) 
+   ![PO PATCH 2](https://github.com/jhanaveenk/VMS/assets/71990959/088ddc3b-c9ac-445e-b66b-cd23cfa9c915)
+
+    => DELETE /api/purchase_orders/{po_id}/: Delete a purchase order.  ![DELETE PO](https://github.com/jhanaveenk/VMS/assets/71990959/c7b70b83-65ac-4e6e-b79d-f0ed45f7026b)
 
 5. Update Acknowledgment Endpoint:
    
-    => POST /api/purchase_orders/{po_id}/acknowledge : Endpoint for vendors to acknowledge POs
+    => POST /api/purchase_orders/{po_id}/acknowledge : Endpoint for vendors to acknowledge POs. ![Acknowledgment Endpoint](https://github.com/jhanaveenk/VMS/assets/71990959/306910d1-a053-4e6f-9966-7f838fcb2b74)
 
 7. Vendor Performance Evaluation:
    
-   => GET /api/vendors/{vendor_id}/performance/: Retrieve a vendor's performance metrics
+   => GET /api/vendors/{vendor_id}/performance/: Retrieve a vendor's performance metrics ![Performance Metrics](https://github.com/jhanaveenk/VMS/assets/71990959/99bd362b-daa3-4d59-b5cf-3824a045b803)
+
