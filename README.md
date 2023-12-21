@@ -1,6 +1,9 @@
 Vendor Management System with Performance Metrics:
 
-SET UP ==>
+SET UP ==> 
+   ```bash 
+   git clone https://github.com/jhanaveenk/VMS.git 
+   ```
 
 1. Clone the Repo by this command :
 2. Setup a virtual environment:
@@ -8,16 +11,21 @@ SET UP ==>
 
    ```bash
    pip install virtualenv
-   Run the virtual environment in your project by running this command in the project directory:
-   python<version> -m venv <virtual-environment-name>
-
    ```
+   Run the virtual environment in your project by running this command in the project directory:
+   ```bash
+   python<version> -m venv <virtual-environment-name>
+   ```
+   
+
 
 3. Install all requirements through this command: pip install -r requirements.txt
 4. SET UP your DATABASE in DB else default will be SQLite
 5. Migrate models to the DB by these commands:
+  ```bash
    python manage.py makemigrations
    python manage.py migrate
+  ```
 6. start the server using: python manage.py runserver and server will get started on http://127.0.0.1:8000/
 
 If any error in packages or migration issue occurs resolve it accordingly.
