@@ -25,6 +25,8 @@ def update_vendor_performance_on_delete(sender, instance, **kwargs):
 def update_quality_rating_avg(vendor):
     completed_pos = PurchaseOrders.objects.filter(vendor=vendor, status='completed', quality_rating__isnull=False)
     quality_rating_avg = completed_pos.aggregate(Avg('quality_rating'))['quality_rating__avg']
+    if quality_rating_avg is None:
+        quality_rating_avg = 0
     HistoricalPerformaces.objects.update_or_create(vendor=vendor, defaults={'quality_rating_avg': round(quality_rating_avg, 2)})
     Vendors.objects.filter(pk=vendor.pk).update(quality_rating_avg=round(quality_rating_avg, 2))
 
@@ -50,10 +52,11 @@ def update_on_time_delivery_rate(sender, instance, **kwargs):
         vendor = instance.vendor
         completed_pos = PurchaseOrders.objects.filter(vendor=vendor, status='completed')
         prev_dilivery_rate = HistoricalPerformaces.objects.get(vendor=vendor).on_time_delivery_rate
-        on_time_deliveries = round((completed_pos.count()-1)*prev_dilivery_rate,2)
+        if prev_dilivery_rate is None:
+            prev_dilivery_rate = 0
+        on_time_deliveries = round((completed_pos.count()-1)*prev_dilivery_rate)
         if instance.delivery_date >= timezone.now():
             on_time_deliveries = on_time_deliveries+1
         on_time_delivery_rate = round(on_time_deliveries / completed_pos.count(), 2) if completed_pos.count() > 0 else 0.0
-
         HistoricalPerformaces.objects.filter(vendor=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)
         Vendors.objects.filter(pk=vendor.pk).update(on_time_delivery_rate=on_time_delivery_rate)

@@ -114,7 +114,7 @@ class PurchaseOrdersDetailView(APIView):
 class OrderAcknowledgeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         po_id = kwargs["po_id"]
         try:
             purchase_instance = PurchaseOrders.objects.get(id=po_id)

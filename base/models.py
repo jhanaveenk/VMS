@@ -37,7 +37,7 @@ class PurchaseOrders(models.Model):
 class HistoricalPerformaces(models.Model):
     vendor = models.ForeignKey('base.Vendors', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
-    on_time_delivery_rate = models.FloatField(null=True, blank=True)
-    quality_rating_avg = models.FloatField(null=True, blank=True)
+    on_time_delivery_rate = models.FloatField(default = 0.00, null=True, blank=True)
+    quality_rating_avg = models.FloatField(default=0.00, null=True, blank=True)
     average_response_time = models.DurationField(null=True, blank=True)
-    fulfillment_rate = models.FloatField(null=True, blank=True)
+    fulfillment_rate = models.FloatField( default=0.00, null=True, blank=True)
